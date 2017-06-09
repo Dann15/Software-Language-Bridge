@@ -1,0 +1,84 @@
+package com.leftindust.slb.java;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class LanguageBridgeInput {
+	public enum NativeLanguageSupport { PYTHON, JAVA }
+	private String link=null;
+	private boolean smt;
+	public LanguageBridgeInput(String linkageFile){
+		linkageFile=link;
+		smt=true;
+	}
+	public LanguageBridgeInput(String linkageFile, boolean smart){
+		linkageFile=link;
+		smt=smart;
+	}
+	public ArrayList<String> getLinkContents_ArrayList(){
+		BufferedReader br = null;
+		FileReader fr = null;
+		
+		ArrayList<String> ret = new ArrayList<String>();
+		
+		try {
+			fr = new FileReader(link);
+			br = new BufferedReader(fr);
+			String sc;
+			br = new BufferedReader(new FileReader(link));
+			while ((sc = br.readLine()) != null) {
+				ret.add(sc);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (fr != null){
+					fr.close();
+				}
+				if (br != null){
+					br.close();
+				}
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+
+		}
+		
+		return ret;
+	}
+	public String[] getLinkContents_Array(){
+		return (String[]) getLinkContents_ArrayList().toArray();
+	}
+	public String getLinkContents_String(){
+		String t = "";
+		for(String s : getLinkContents_ArrayList()){
+			t=t+"\n"+s;
+		}
+		return t;
+	}
+	
+	public String retrieveLatest(){
+		String r=null;
+		if(smt){
+			int i=1;
+			while(r==null){
+				if(getLinkContents_ArrayList().size()-i==0){
+					new Exception("This file is empty, smart retrieveLatest() function cannot find the latest line. Try disabling smart feature to fix this.");
+				} if(getLinkContents_ArrayList().get(getLinkContents_ArrayList().size()-i).replaceAll(" ", "").replaceAll("\n", "") != ""){
+					return getLinkContents_ArrayList().get(getLinkContents_ArrayList().size()-i);
+				} else {
+					i++;
+				}
+			}
+			
+		} else {
+			return getLinkContents_ArrayList().get(getLinkContents_ArrayList().size()-1);
+		}
+		
+		return r;
+	}
+	
+}
